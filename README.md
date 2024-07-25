@@ -1,0 +1,11 @@
+Things to do:
+ - [ ] Set up github repo
+ - [ ] Set up new sqlite db
+ - [ ] Attach database to UI
+ - [ ] Set up schema for all tables and generate tables on db
+ - [ ] Create express backend and routes
+ - [ ] implement jwt and protected api routes
+ - [ ] be able to fetch api calls on the front end
+ - [ ] implement search bar with debouncing
+ - [ ] be able to switch locations
+ - [ ] cook front end and extra features
