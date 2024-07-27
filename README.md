@@ -1,7 +1,7 @@
 Things to do:
- - [ ] Set up github repo
- - [ ] Set up new sqlite db
- - [ ] Attach database to UI
+ - [x] Set up github repo
+ - [x] Set up new sqlite db
+ - [x] Attach database to UI
  - [ ] Set up schema for all tables and generate tables on db
  - [ ] Create express backend and routes
  - [ ] implement jwt and protected api routes
