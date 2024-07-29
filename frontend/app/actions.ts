@@ -1,23 +1,36 @@
 'use server';
-import { InsertUser } from '../../backend/db/schema';
 
-export async function createUser(values: InsertUser) {
-  try {
-    const response = await fetch('http://localhost:5000/createUser', {
-      method: 'POST',
-      body: JSON.stringify(values),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    console.log(data)
-    return data;
-  } catch (error) {
-    console.error('Failed to fetch data:', error);
-    throw error;
-  }
+import { z } from 'zod';
+import { getUserByUsername, insertUser } from '../db/queries';
+import { loginFormSchema, signupFormSchema } from '../db/schema';
+import bcrypt from 'bcrypt';
+
+export async function signup(
+  values: z.infer<typeof signupFormSchema>
+): Promise<{ error: string } | { success: string }> {
+  const user = await getUserByUsername(values.username);
+  if (user) return { error: 'Username taken' };
+
+  const hashedPassword = await bcrypt.hash(values.password, 10);
+
+  const newUser = await insertUser({
+    ...values,
+    password: hashedPassword,
+  });
+
+  if (newUser[0].id) return { success: `Created user: ${values.username}` };
+  else return { error: 'Error creating user' };
+}
+
+export async function login(
+  values: z.infer<typeof loginFormSchema>
+): Promise<{ error: string } | { success: string }> {
+  const user = await getUserByUsername(values.username);
+  if (!user) return { error: 'User does not exist' };
+
+  const passwordsMatch = await bcrypt.compare(values.password, user.password);
+
+  if (!passwordsMatch) return { error: 'Username or password does not match' };
+
+  return { success: 'Passwords match' };
 }

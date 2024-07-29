@@ -1,6 +1,9 @@
 import { insertUser } from '../db/queries';
 import express, { type Express, type Request, type Response } from 'express';
 import bcrypt from 'bcrypt';
+import { config } from 'dotenv';
+
+config({ path: '../.env' });
 
 const app: Express = express();
 app.use(express.json());
@@ -18,7 +21,7 @@ app.post('/createUser', async (request: Request, response: Response) => {
       password: hashedPassword,
       salt: salt,
     });
-    
+
     return response.status(201).json(result);
   } catch (error) {
     console.error('Error inserting user:', error);
