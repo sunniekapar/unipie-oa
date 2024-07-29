@@ -1,7 +1,7 @@
 import { defineConfig } from 'drizzle-kit';
 import { config } from 'dotenv';
 
-config({ path: './.env' });
+config({ path: './.env.local' });
 
 console.log('TURSO_CONNECTION_URL:', process.env.TURSO_CONNECTION_URL);
 console.log('TURSO_AUTH_TOKEN:', process.env.TURSO_AUTH_TOKEN);

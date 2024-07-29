@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/libsql';
 import { createClient } from '@libsql/client/web';
 
-config({ path: '../.env' });
+config({ path: '../.env.local' });
 
 const client = () =>
   createClient({
