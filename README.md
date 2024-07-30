@@ -4,7 +4,8 @@ Things to do:
  - [x] Attach database to UI
  - [x] Set up schema for all tables and generate tables on db
  - [x] Set up auth with JWT
- - [ ] implement search bar with debouncing
+ - [x] implement search bar with debouncing
+ - [ ] mock data for charts
  - [ ] Create express backend and routes
  - [ ] implement protected api routes
  - [ ] be able to fetch api calls on the front end
