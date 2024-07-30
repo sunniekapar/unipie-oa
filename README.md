@@ -2,11 +2,11 @@ Things to do:
  - [x] Set up github repo
  - [x] Set up new sqlite db
  - [x] Attach database to UI
- - [X] Set up schema for all tables and generate tables on db
- - [ ] Set up auth with JWT
- - [ ] Create express backend and routes
- - [ ] implement jwt and protected api routes
- - [ ] be able to fetch api calls on the front end
+ - [x] Set up schema for all tables and generate tables on db
+ - [x] Set up auth with JWT
  - [ ] implement search bar with debouncing
+ - [ ] Create express backend and routes
+ - [ ] implement protected api routes
+ - [ ] be able to fetch api calls on the front end
  - [ ] be able to switch locations
  - [ ] cook front end and extra features

@@ -27,8 +27,8 @@ export default function LogInForm() {
 
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     login(values).then((result) => {
-      if ('error' in result) return toast.error(result.error);
-      else return toast.success(result.success);
+      if (!result) return;
+      else if ('error' in result) return toast.error(result.error);
     });
   }
 

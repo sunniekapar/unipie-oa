@@ -4,6 +4,9 @@ import { z } from 'zod';
 import { getUserByUsername, insertUser } from '../db/queries';
 import { loginFormSchema, signupFormSchema } from '../db/schema';
 import bcrypt from 'bcrypt';
+import { encrypt, getSession } from '@/lib/jwt';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export async function signup(
   values: z.infer<typeof signupFormSchema>
@@ -29,8 +32,21 @@ export async function login(
   if (!user) return { error: 'User does not exist' };
 
   const passwordsMatch = await bcrypt.compare(values.password, user.password);
-
   if (!passwordsMatch) return { error: 'Username or password does not match' };
 
-  return { success: 'Passwords match' };
+  const tokenExpires = new Date(Date.now() + 10 * 1000);
+  const session = await encrypt({
+    username: user.username,
+    id: user.id,
+  });
+  cookies().set('session', session, { expires: tokenExpires, httpOnly: true });
+  redirect('/home');
+}
+
+// i think this is wrong
+export async function auth() {
+  const session = await getSession();
+  if (!session) return; // redirect
+  const user = await getUserByUsername(session.username);
+  return user;
 }
