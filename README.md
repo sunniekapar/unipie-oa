@@ -5,9 +5,9 @@ Things to do:
  - [x] Set up schema for all tables and generate tables on db
  - [x] Set up auth with JWT
  - [x] implement search bar with debouncing
- - [ ] mock data for charts
+ - [x] mock data for charts
  - [ ] Create express backend and routes
- - [ ] implement protected api routes
  - [ ] be able to fetch api calls on the front end
+ - [ ] implement protected api routes
  - [ ] be able to switch locations
  - [ ] cook front end and extra features
