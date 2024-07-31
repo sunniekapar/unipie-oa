@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt';
 import { encrypt, getSession } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { Location } from '@/types';
 
 export async function signup(
   values: z.infer<typeof signupFormSchema>
@@ -49,4 +50,12 @@ export async function auth() {
   if (!session) return; // redirect
   const user = await getUserByUsername(session.username);
   return user;
+}
+
+export async function getLocations(query: string): Promise<Location[]> {
+  const response = await fetch(
+    `http://localhost:5000/locations?location=${query}`
+  );
+  const { data } = await response.json();
+  return data;
 }
