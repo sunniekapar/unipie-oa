@@ -8,6 +8,7 @@ import { encrypt, getSession } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Location } from '@/types';
+import { extractForecastData } from '@/lib/utils';
 
 export async function signup(
   values: z.infer<typeof signupFormSchema>
@@ -35,27 +36,73 @@ export async function login(
   const passwordsMatch = await bcrypt.compare(values.password, user.password);
   if (!passwordsMatch) return { error: 'Username or password does not match' };
 
-  const tokenExpires = new Date(Date.now() + 10 * 1000);
+  const tokenExpires = new Date(Date.now() + 1000 * 1000);
   const session = await encrypt({
     username: user.username,
     id: user.id,
   });
   cookies().set('session', session, { expires: tokenExpires, httpOnly: true });
+  await new Promise((resolve) => setTimeout(resolve, 6000));
   redirect('/home');
 }
 
-// i think this is wrong
 export async function auth() {
   const session = await getSession();
-  if (!session) return; // redirect
-  const user = await getUserByUsername(session.username);
-  return user;
+  if (!session) return redirect('/auth');
+  const { username, id } = await getUserByUsername(session.username);
+  return { username, id };
 }
 
 export async function getLocations(query: string): Promise<Location[]> {
+  const jwt = cookies().get('session');
   const response = await fetch(
-    `http://localhost:5000/locations?location=${query}`
+    `http://localhost:5000/locations?location=${query}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt?.value}`,
+      },
+    }
   );
+  if (!response.ok && response.status === 401) return redirect(`/auth`);
+  const { data } = await response.json();
+  return data;
+}
+
+export async function getForecast(coordinates: { lat: string; lon: string }) {
+  const jwt = cookies().get('session');
+  const response = await fetch(
+    `http://localhost:5000/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt?.value}`,
+      },
+    }
+  );
+  if (!response.ok && response.status === 401) return redirect(`/auth`);
+  const { data } = await response.json();
+  return extractForecastData(data);
+}
+
+export async function getWeather(coordinates: { lat: string; lon: string }) {
+  const jwt = cookies().get('session');
+  const response = await fetch(
+    `http://localhost:5000/weather?lat=${coordinates.lat}&lon=${coordinates.lon}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt?.value}`,
+      },
+    }
+  );
+  if (!response.ok && response.status === 401) return redirect(`/auth`);
   const { data } = await response.json();
   return data;
 }

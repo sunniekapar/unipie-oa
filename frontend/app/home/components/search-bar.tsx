@@ -1,7 +1,11 @@
 'use client';
 
 import { KeyboardEvent, useState } from 'react';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import {
+  useRouter,
+  useSearchParams,
+  usePathname,
+} from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 import { Location } from '@/types';
 import { Input } from '@/components/ui/input';
@@ -18,7 +22,10 @@ export default function SearchBar() {
   const [locations, setLocations] = useState<Location[]>([]);
 
   const findAllLocations = useDebouncedCallback((location: string) => {
-    if (location) getLocations(location).then((result) => setLocations(result));
+    if (location)
+      getLocations(location).then((result) => {
+        return setLocations(result);
+      });
     else setLocations([]);
   }, 300);
 

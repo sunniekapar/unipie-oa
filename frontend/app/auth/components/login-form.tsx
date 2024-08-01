@@ -25,6 +25,8 @@ export default function LogInForm() {
     },
   });
 
+  const { isSubmitting, isDirty, isValid } = form.formState;
+
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     login(values).then((result) => {
       if (!result) return;
@@ -64,7 +66,12 @@ export default function LogInForm() {
               </FormItem>
             )}
           />
-          <Button size="sm" type="submit" className="self-center px-10">
+          <Button
+            disabled={!isValid || !isDirty || isSubmitting}
+            size="sm"
+            type="submit"
+            className="self-center px-10"
+          >
             Login
           </Button>
         </form>

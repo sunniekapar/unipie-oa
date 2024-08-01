@@ -2,9 +2,10 @@ import WeeklyForecast, {
   WeeklyForecastSkeleton,
 } from './components/weekly-forecast';
 import { Suspense } from 'react';
-import { getForecast, getWeather } from '@/lib/weather';
+import { getForecast, getWeather } from '@/app/actions';
 import SearchBar from './components/search-bar';
 import Weather from './components/weather';
+import { auth } from '../actions';
 
 export default async function HomePage({
   searchParams,

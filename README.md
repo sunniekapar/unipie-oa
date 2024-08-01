@@ -6,8 +6,8 @@ Things to do:
  - [x] Set up auth with JWT
  - [x] implement search bar with debouncing
  - [x] mock data for charts
- - [ ] Create express backend and routes
- - [ ] be able to fetch api calls on the front end
- - [ ] implement protected api routes
- - [ ] be able to switch locations
+ - [x] Create express backend and routes
+ - [x] be able to fetch api calls on the front end
+ - [x] implement protected api routes
+ - [x] be able to switch locations
  - [ ] cook front end and extra features
