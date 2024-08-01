@@ -1,45 +1,58 @@
-# Setup
+ # Setup
 
-### Prerequisites
+  ### Prerequisites
 
-Before you begin, ensure you have the following installed on your machine:
+  Before you begin, ensure you have the following installed on your machine:
 
-- [Node.js](https://nodejs.org/)
-- [Bun](https://bun.sh/)
+  - [Node.js](https://nodejs.org/)
+  - [Bun](https://bun.sh/)
 
-### Installation
+  ### Installation
 
-Follow the steps below to set up the project:
+  Follow the steps below to set up the project:
 
-1. **Clone the repository:**
+  1. **Clone the repository:**
 
-   ```sh
-   git clone https://github.com/sunniekapar/unipie-oa.git
-   cd unipie-oa
-   ```
+     ```sh
+     git clone https://github.com/sunniekapar/unipie-oa.git
+     cd unipie-oa
+     ```
 
-2. **Set up the backend:**
+  2. **Set up the backend:**
 
-   ```sh
-   cd backend
-   bun i
-   bun run dev
-   ```
+     ```sh
+     cd backend
+     bun i
+     bun run dev
+     ```
 
-3. **Set up the frontend:**
-   ```sh
-   cd ../frontend
-   bun i
-   bun run dev
-   ```
+     Fill in the environment variables in the `.env` file.
 
-### Running the Application
+  3. **Set up the frontend:**
 
-After completing the setup, you should be able to access the frontend at [http://localhost:3000](http://localhost:3000).
+     ```sh
+     cd ../frontend
+     bun i
+     bun run dev
+     ```
 
-## Project Structure
+     Fill in the environment variables in the `.env.local` file.
+     
+     To set up the database, head to Turso and create a new database. Fill in the values in the `.env.local` file. Then, in the terminal, run:
 
-The project is organized into two main directories:
+     ```sh
+     bun run db:push
+     ```
 
-- `backend`: Contains jwt protected api routes to the OpenWeatherMap API.
-- `frontend`: Contains auth, and front end code.
+     This will create a database for the users.
+
+  ### Running the Application
+
+  After completing the setup, you should be able to access the frontend at [http://localhost:3000](http://localhost:3000).
+
+  ## Project Structure
+
+  The project is organized into two main directories:
+
+  - `backend`: Contains JWT-protected API routes to the OpenWeatherMap API.
+  - `frontend`: Contains authentication and frontend code.

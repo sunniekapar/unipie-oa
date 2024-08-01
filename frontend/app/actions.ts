@@ -42,7 +42,6 @@ export async function login(
     id: user.id,
   });
   cookies().set('session', session, { expires: tokenExpires, httpOnly: true });
-  await new Promise((resolve) => setTimeout(resolve, 6000));
   redirect('/home');
 }
 
