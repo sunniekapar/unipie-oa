@@ -5,7 +5,6 @@ import { Suspense } from 'react';
 import { getForecast, getWeather } from '@/app/actions';
 import SearchBar from './components/search-bar';
 import Weather from './components/weather';
-import { auth } from '../actions';
 
 export default async function HomePage({
   searchParams,
@@ -23,11 +22,11 @@ export default async function HomePage({
   const [forecast, weather] = await Promise.all([forecastData, weatherData]);
 
   return (
-    <main className="max-w-screen-sm container pt-16 space-y-6">
+    <main className="max-w-screen-sm container pt-16 space-y-12">
       <SearchBar />
       <Suspense fallback={<WeeklyForecastSkeleton />}>
+        <Weather data={weather} />
         <WeeklyForecast data={forecast} />
-        {/* <Weather data={weather} /> */}
       </Suspense>
     </main>
   );

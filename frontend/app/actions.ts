@@ -8,7 +8,7 @@ import { encrypt, getSession } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Location } from '@/types';
-import { extractForecastData } from '@/lib/utils';
+import { extractForecastData, extractWeatherData } from '@/lib/utils';
 
 export async function signup(
   values: z.infer<typeof signupFormSchema>
@@ -104,5 +104,5 @@ export async function getWeather(coordinates: { lat: string; lon: string }) {
   );
   if (!response.ok && response.status === 401) return redirect(`/auth`);
   const { data } = await response.json();
-  return data;
+  return extractWeatherData(data);
 }

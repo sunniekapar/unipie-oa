@@ -1,4 +1,4 @@
-export type WeatherData = {
+export type ForecastAPIData = {
   cod: string;
   message: number;
   cnt: number;
@@ -51,7 +51,52 @@ export type WeatherData = {
   };
 };
 
-export type WeeklyData = Record<
+export type WeatherAPIData = {
+  coord: {
+    lon: number;
+    lat: number;
+  };
+  weather: Array<{
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+  }>;
+  base: string;
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+    sea_level: number;
+    grnd_level: number;
+  };
+  visibility: number;
+  wind: {
+    speed: number;
+    deg: number;
+    gust: number;
+  };
+  clouds: {
+    all: number;
+  };
+  dt: number;
+  sys: {
+    type: number;
+    id: number;
+    country: string;
+    sunrise: number;
+    sunset: number;
+  };
+  timezone: number;
+  id: number;
+  name: string;
+  cod: number;
+};
+
+export type ForecastData = Record<
   string,
   {
     minTemp: number;
@@ -59,6 +104,14 @@ export type WeeklyData = Record<
     icon: string;
   }
 >;
+
+export type WeatherData = {
+  location: string;
+  currentTemp: number;
+  minTemp: number;
+  maxTemp: number;
+  description: string;
+} | null;
 
 export type Location = {
   name: string;
