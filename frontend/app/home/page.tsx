@@ -1,27 +1,33 @@
-import Search from './components/search';
-import WeeklyForecast from './components/weekly-forecast';
+import WeeklyForecast, {
+  WeeklyForecastSkeleton,
+} from './components/weekly-forecast';
 import { Suspense } from 'react';
 import { getForecast, getWeather } from '@/lib/weather';
+import SearchBar from './components/search-bar';
+import Weather from './components/weather';
 
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams?: { query?: string };
+  searchParams?: { lat: string; lon: string };
 }) {
-  const query = searchParams?.query || '';
+  const coordinates = {
+    lat: searchParams?.lat || '',
+    lon: searchParams?.lon || '',
+  };
 
-  const forecastData = await getForecast(query);
-  const weatherData = await getWeather(query);
+  const forecastData = await getForecast(coordinates);
+  const weatherData = await getWeather(coordinates);
 
   const [forecast, weather] = await Promise.all([forecastData, weatherData]);
 
   return (
     <main className="max-w-screen-sm container pt-16 space-y-6">
-      <Search />
-      <Suspense fallback={<>Loading...</>}>
+      <SearchBar />
+      <Suspense fallback={<WeeklyForecastSkeleton />}>
         <WeeklyForecast data={forecast} />
+        {/* <Weather data={weather} /> */}
       </Suspense>
-      {query}
     </main>
   );
 }

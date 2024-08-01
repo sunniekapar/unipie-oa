@@ -6,16 +6,9 @@ import { useDebouncedCallback } from 'use-debounce';
 import { Location } from '@/types';
 import { Input } from '@/components/ui/input';
 import { getLocations } from '@/app/actions';
+import { Search } from 'lucide-react';
 
-function cleanLocation(location: Location) {
-  let { name, state, country } = location;
-  name = name.toLowerCase().replaceAll(' ', '_');
-  state = state ? state.toLowerCase().replaceAll(' ', '_') : '';
-  console.log(`${name},${state}${state ? ',' : state}${country}`);
-  return `${name},${state}${state ? ',' : state}${country}`;
-}
-
-export default function Search() {
+export default function SearchBar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -25,23 +18,23 @@ export default function Search() {
   const [locations, setLocations] = useState<Location[]>([]);
 
   const findAllLocations = useDebouncedCallback((location: string) => {
-    if (location) {
-      getLocations(location).then((result) => {
-        setLocations(result);
-      });
-    } else setLocations([])
+    if (location) getLocations(location).then((result) => setLocations(result));
+    else setLocations([]);
   }, 300);
 
   const chooseLocation = (location: Location) => {
-    setResultsShown(false)
-    const queryParam = cleanLocation(location);
-    console.log(queryParam);
+    setResultsShown(false);
+    const { lat, lon } = location;
     const params = new URLSearchParams(searchParams);
-    if (queryParam) {
-      params.set('query', queryParam);
+
+    if (lat && lon) {
+      params.set('lat', lat.toString());
+      params.set('lon', lon.toString());
     } else {
-      params.delete('query');
+      params.delete('lat');
+      params.delete('lon');
     }
+
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -61,22 +54,27 @@ export default function Search() {
 
   return (
     <section className="flex flex-col gap-6 relative">
-      <Input
-        value={search}
-        onChange={(e) => handleValueChange(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
+      <div className="flex items-center border-b px-3">
+        <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+        <Input
+          className="border-0 focus-visible:ring-0"
+          value={search}
+          onChange={(e) => handleValueChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Search for a location..."
+        />
+      </div>
       {locations.length > 0 && resultsShown ? (
-        <div className="absolute top-12 w-full z-10 bg-background/60 backdrop-blur-sm rounded-b-lg">
+        <div className="absolute top-12 w-full z-10 bg-background/85 backdrop-blur-sm rounded-b-lg divide-background divide-y-2">
           {locations.map((location, index) => (
             <div
               onClick={() => chooseLocation(location)}
               key={index}
-              className="flex justify-between items-center gap-1.5 px-4 py-2.5 group hover:bg-primary-foreground/90 hover:backdrop-blur-sm "
+              className="flex justify-between items-center gap-1.5 px-4 py-2.5 group transition-all duration-300 hover:bg-primary-foreground/90 hover:backdrop-blur-sm"
             >
               <div className="inline-flex flex-col">
                 <p>{location.name}</p>
-                <small className="text-primary/70 group-hover:text-primary/100 transition-all duration-300">
+                <small className="text-primary/70 group-hover:text-primary/100">
                   {location.state}
                 </small>
               </div>
@@ -84,7 +82,7 @@ export default function Search() {
             </div>
           ))}
         </div>
-      ) : locations.length === 0 ? (
+      ) : locations.length === 0 && search != '' ? (
         <small className="self-center text-primary/70">No results</small>
       ) : null}
     </section>

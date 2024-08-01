@@ -11,12 +11,12 @@ const port = process.env.PORT || '5000';
 
 app.get('/forecast', async (request: Request, response: Response) => {
   try {
-    const { location } = request.query;
-    if (!location)
+    const { lat, lon } = request.query;
+    if (!lat && !lon)
       return response.status(400).json({ error: 'Location not provided' });
 
     const apiResponse = await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?q=${location}&APPID=${process.env.API_KEY}&units=metric`
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${process.env.API_KEY}&units=metric`
     );
 
     if (!apiResponse.ok) {
@@ -34,14 +34,14 @@ app.get('/forecast', async (request: Request, response: Response) => {
 
 app.get('/weather', async (request: Request, response: Response) => {
   try {
-    const { location } = request.query;
-    if (!location)
+    const { lat, lon } = request.query;
+    if (!lat && !lon)
       return response.status(400).json({ error: 'Location not provided' });
-
+    
     const apiResponse = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=${process.env.API_KEY}`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.API_KEY}&units=metric`
     );
-
+    
     if (!apiResponse.ok) {
       const errorMessage = await apiResponse.text();
       return response.status(apiResponse.status).json({ error: errorMessage });
